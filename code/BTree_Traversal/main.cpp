@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+#include <queue>
 using namespace std;
 
 struct TreeNode {
@@ -84,6 +85,50 @@ vector<int> postorderTraversal(TreeNode* root) {
     }
     return ret;
 }
+
+vector<int> levelorderTraversal(TreeNode* root)
+{
+    vector<int> ret;
+    if(root == nullptr) return ret;
+    queue<TreeNode*> q;
+    q.push(root);
+
+    while(!q.empty()) {
+        TreeNode *front = q.front();
+        ret.push_back(front->val);
+        q.pop();
+        if(front->left) q.push(front->left);
+        if(front->right) q.push(front->right);
+    }
+    return ret;
+}
+
+vector<vector<int>> levelOrder(TreeNode* root) {
+    vector<vector<int>> ret;
+    if (root == nullptr) return ret;
+
+    queue<TreeNode*> q;
+    q.push(root);
+
+    while (!q.empty()) {
+        int levelSize = q.size();
+        vector<int> currentLevelValues;
+
+        // 只处理当前层的节点
+        for (int i = 0; i < levelSize; ++i) {
+            TreeNode* node = q.front();
+            q.pop();
+            // 将节点值存入当前层的向量
+            currentLevelValues.push_back(node->val);
+            // 将下一层的节点入队
+            if (node->left) q.push(node->left);
+            if (node->right) q.push(node->right);
+        }
+        ret.push_back(currentLevelValues);
+    }
+
+    return ret;
+}
 int main() {
     // 构建一个简单的二叉树进行测试
     TreeNode* root = new TreeNode(1);
@@ -114,6 +159,23 @@ int main() {
         cout << val << " ";
     }
     cout << endl;
+    
+    ret = levelorderTraversal(root);
+    // 1 2 3 4 5 6 7
+    for(int val : ret) {
+        cout << val << " ";
+    }
+    cout << endl;
 
+    vector<vector<int>> levels = levelOrder(root);
+    // 1
+    // 2 3
+    // 4 5 6 7
+    for (const auto& level : levels) {
+        for (int val : level) {
+            cout << val << " ";
+        }
+        cout << endl;
+    }
     return 0;
 }
