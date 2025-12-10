@@ -6,3 +6,5 @@ build/
 
 # Compiled object files
 *.o
+
+*.out
